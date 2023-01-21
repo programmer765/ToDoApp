@@ -5,6 +5,8 @@ import { fileURLToPath } from "url";
 import date from "./date.js";
 import mongoose from "mongoose";
 import _ from "lodash";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 app.set("view engine", "ejs");
@@ -13,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "public")));
 mongoose.connect(
-  "mongodb+srv://<username>:<password>@cluster0.vdvle.mongodb.net/todolistDB?retryWrites=true&w=majority"
+  `mongodb+srv://admin-aviprit:${process.env.password}@cluster0.vdvle.mongodb.net/todolistDB?retryWrites=true&w=majority`
 );
 
 const itemsSchema = new mongoose.Schema({
@@ -116,10 +118,7 @@ app.get("/about", function (req, res) {
   res.render("about");
 });
 
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 3000;
-}
+const port = process.env.PORT || 3000;
 
 app.listen(port, function () {
   console.log("Server is Running...");
